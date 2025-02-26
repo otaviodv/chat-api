@@ -43,6 +43,21 @@ func (r *Room) Create() (*primitive.ObjectID, error) {
 	return &id, nil
 }
 
+func (r *Room) Get(id string) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	q := bson.M{"_id": objID}
+	err = roomCollection.FindOne(context.Background(), q).Decode(r)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
 func (r *RoomItem) Get(id string) error {
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -58,5 +73,4 @@ func (r *RoomItem) Get(id string) error {
 	r.Messages, err = getLastMessagesFromRoom(r.Id)
 
 	return err
-
 }

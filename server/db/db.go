@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -24,22 +23,18 @@ func connect(ctx context.Context, uri string, database string) {
 	var err error
 
 	client, err = mongo.Connect(ctx, options.Client().ApplyURI(uri))
+
 	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Conectando Mongo")
-	// err = client.Connect(ctx)
-	if err != nil {
-		fmt.Println("Erro connect==>", err)
+		log.Println("Mongo Connection error ==>", err)
 		log.Fatal(err)
 	}
 
-	fmt.Println("Ping")
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		fmt.Println("Erro ping==>", err)
+		log.Println("Mongo PING error==>", err)
 		log.Fatal(err)
 	}
+	log.Println("Database connection succeeded")
 	dbname = database
 }
 

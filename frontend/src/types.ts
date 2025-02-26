@@ -8,7 +8,7 @@ export interface Message {
 
 export interface Room {
   id: string;
-  name: string;
+  title: string;
 
   createdAt: string;
   messages: Message[];

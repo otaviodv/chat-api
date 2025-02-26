@@ -46,17 +46,17 @@ func getLastMessagesFromRoom(roomId primitive.ObjectID) ([]Message, error) {
 
 	cursor, err := messageCollection.Find(context.Background(), filter, options)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return []Message{}, nil
-		}
 		return nil, err
 	}
 	var messages []Message
-
 	if err = cursor.All(context.Background(), &messages); err != nil {
 		return nil, err
 	}
-	slices.Reverse(messages)
 
+	if messages == nil {
+		return []Message{}, nil
+	}
+
+	slices.Reverse(messages)
 	return messages, nil
 }

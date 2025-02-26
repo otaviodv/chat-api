@@ -24,9 +24,10 @@ func setupCors(r *chi.Mux) {
 
 func buildHandler() *chi.Mux {
 	handler := chi.NewMux()
-	chi.NewRouter()
+
 	setupCors(handler)
-	routes.SetupRoutes(handler)
+	handler.Mount("/api", routes.SetupRoutes())
+	handler.Mount("/ws", routes.SetupWS())
 
 	return handler
 }
@@ -39,7 +40,6 @@ func Serve() {
 		if err != nil {
 			panic(err)
 		}
-
 	}()
 
 	quit := make(chan os.Signal, 1)
