@@ -26,21 +26,25 @@ func handleStock(args string, cmd model.CommandTransport) error {
 	defer resp.Body.Close()
 	byteBody, err := io.ReadAll(resp.Body)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
 	parsedResp := strings.Split(string(byteBody), "\n")
 	if len(parsedResp) < 2 {
+		fmt.Println(err)
 		return errors.New("invalid stock code")
 	}
 	values := strings.Split(parsedResp[1], ",")
 	if len(values) < 7 {
+		fmt.Println(err)
 		return errors.New("invalid stock code")
 	}
 
 	val, err := strconv.ParseFloat(values[6], 64)
 
 	if err != nil {
+		fmt.Println(err)
 		return errors.New("invalid stock code")
 	}
 	data, _ := json.Marshal(model.CommandTransport{
@@ -48,6 +52,7 @@ func handleStock(args string, cmd model.CommandTransport) error {
 		Username: "BOT",
 		Text:     fmt.Sprintf("%s quote is $%.2f per share", values[0], val),
 	})
+
 	rabbitmq.Push(data)
 
 	return nil

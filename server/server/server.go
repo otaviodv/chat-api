@@ -36,7 +36,7 @@ func buildHandler() *chi.Mux {
 
 func Serve() {
 	handler := buildHandler()
-	port := 8080
+	port := 80
 	go rabbitmq.StartRabbitMQ()
 	go func() {
 		err := http.ListenAndServe(fmt.Sprintf(":%d", port), handler)

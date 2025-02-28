@@ -6,7 +6,6 @@ import (
 	"chat-api-bot/model"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -23,8 +22,6 @@ func HandleCommand(w http.ResponseWriter, r *http.Request) {
 		helper.ErrorJSON(w, err)
 		return
 	}
-
-	fmt.Println("chorou aqui", cmd.Text)
 
 	if len(cmd.Text) < 2 || !strings.HasPrefix(cmd.Text, "/") {
 		helper.ErrorJSON(w, errors.New("invalid command"))

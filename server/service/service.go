@@ -24,7 +24,7 @@ func SubmitCommand(msg model.Message) error {
 	}
 	data, _ := json.Marshal(pm)
 
-	request, err := http.NewRequest("POST", "http://localhost:8081/command", bytes.NewBuffer(data))
+	request, err := http.NewRequest("POST", "http://bot/command", bytes.NewBuffer(data))
 	if err != nil {
 		return err
 	}

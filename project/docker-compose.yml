@@ -23,3 +23,47 @@ services:
       replicas: 1
     volumes:
       - ./db-data/rabbitmq/:/var/lib/rabbitmq/
+
+  front:
+    build:
+      context: ./../frontend
+      dockerfile: ./../frontend/front.dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  server:
+    build:
+      context: ./../server
+      dockerfile: ./../server/server.dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+    environment:
+      - MONGO_ADDR=mongo
+      - MONGO_USER=root
+      - MONGO_PASS=root
+      - RABBITMQ_ADDR=rabbitmq
+    depends_on:
+      - rabbitmq
+      - mongo
+
+  bot:
+    build:
+      context: ./../bot
+      dockerfile: ./../bot/bot.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      - RABBITMQ_ADDR=rabbitmq
+    depends_on:
+      - rabbitmq

@@ -2,7 +2,9 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,7 +19,11 @@ var (
 func init() {
 	ctx, _ := context.WithTimeout(context.Background(), 50*time.Second)
 
-	uri := "mongodb://root:root@localhost:27017/?authSource=admin&readPreference=primary&directConnection=true&SSL=false"
+	user := os.Getenv("MONGO_USER")
+	pass := os.Getenv("MONGO_PASS")
+	addr := os.Getenv("MONGO_ADDR")
+
+	uri := fmt.Sprintf("mongodb://%s:%s@%s/?authSource=admin&readPreference=primary&directConnection=true&SSL=false", user, pass, addr)
 	connect(ctx, uri, "chat-api")
 }
 

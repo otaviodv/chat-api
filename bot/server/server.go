@@ -4,6 +4,7 @@ import (
 	"chat-api-bot/controller"
 	"chat-api-bot/rabbitmq"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -34,7 +35,7 @@ func buildHandler() *chi.Mux {
 
 func Serve() {
 	handler := buildHandler()
-	port := 8081
+	port := 80
 	go rabbitmq.StartRabbitMQ()
 	go func() {
 		err := http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
@@ -45,6 +46,6 @@ func Serve() {
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
-	fmt.Printf("Listening on port %d\n", port)
+	log.Printf("Listening on port %d\n", port)
 	<-quit
 }

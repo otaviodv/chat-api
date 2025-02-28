@@ -1,6 +1,11 @@
 package rabbitmq
 
-import amqp "github.com/rabbitmq/amqp091-go"
+import (
+	"fmt"
+	"os"
+
+	amqp "github.com/rabbitmq/amqp091-go"
+)
 
 var rabbitConnection *amqp.Connection
 
@@ -18,7 +23,8 @@ func declareExchange(ch *amqp.Channel, topic string) error {
 
 func StartRabbitMQ() {
 	var err error
-	rabbitConnection, err = amqp.Dial("amqp://guest:guest@localhost:5672/")
+	addr := os.Getenv("RABBITMQ_ADDR")
+	rabbitConnection, err = amqp.Dial(fmt.Sprintf("amqp://guest:guest@%s/", addr))
 	if err != nil {
 		panic(err)
 	}

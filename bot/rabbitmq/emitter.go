@@ -1,6 +1,7 @@
 package rabbitmq
 
 import (
+	"fmt"
 	"log"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -13,6 +14,7 @@ func startEmitter(conn *amqp.Connection) error {
 	}
 	defer ch.Close()
 	declareExchange(ch, "commands_topic")
+	fmt.Println("emitter started")
 	return nil
 }
 

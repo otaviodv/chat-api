@@ -1,6 +1,11 @@
 package rabbitmq
 
-import amqp "github.com/rabbitmq/amqp091-go"
+import (
+	"fmt"
+	"os"
+
+	amqp "github.com/rabbitmq/amqp091-go"
+)
 
 var rabbitConnection *amqp.Connection
 
@@ -29,11 +34,12 @@ func declareQueue(ch *amqp.Channel) (amqp.Queue, error) {
 
 func StartRabbitMQ() {
 	var err error
-	rabbitConnection, err = amqp.Dial("amqp://guest:guest@localhost:5672/")
+	address := os.Getenv("RABBITMQ_ADDR")
+	rabbitConnection, err = amqp.Dial(fmt.Sprintf("amqp://guest:guest@%s/", address))
 	if err != nil {
 		panic(err)
 	}
-	// go StartConsumer(rabbitConnection)
+
 	go startConsumer(rabbitConnection)
 
 }
