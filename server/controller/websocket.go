@@ -20,7 +20,7 @@ type socketHandler struct {
 }
 
 var sh socketHandler
-var receivedMsgs chan model.Message
+var ReceivedMsgs chan model.Message
 
 func init() {
 	sh = socketHandler{
@@ -29,8 +29,8 @@ func init() {
 		mu:       &sync.Mutex{},
 	}
 
-	receivedMsgs = make(chan model.Message, 10)
-	go handleReceivedMsg(receivedMsgs)
+	ReceivedMsgs = make(chan model.Message, 10)
+	go handleReceivedMsg(ReceivedMsgs)
 }
 
 func handleReceivedMsg(msgs chan model.Message) {

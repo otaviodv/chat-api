@@ -1,10 +1,9 @@
 package server
 
 import (
-	"chat-api/rabbitmq"
-	"chat-api/routes"
+	"chat-api-bot/controller"
+	"chat-api-bot/rabbitmq"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -28,15 +27,14 @@ func buildHandler() *chi.Mux {
 	handler := chi.NewMux()
 
 	setupCors(handler)
-	handler.Mount("/api", routes.SetupRoutes())
-	handler.Mount("/ws", routes.SetupWS())
+	handler.Post("/command", controller.HandleCommand)
 
 	return handler
 }
 
 func Serve() {
 	handler := buildHandler()
-	port := 8080
+	port := 8081
 	go rabbitmq.StartRabbitMQ()
 	go func() {
 		err := http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
@@ -47,6 +45,6 @@ func Serve() {
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
-	log.Printf("Listening on port %d\n", port)
+	fmt.Printf("Listening on port %d\n", port)
 	<-quit
 }

@@ -16,7 +16,9 @@ var (
 
 func init() {
 	ctx, _ := context.WithTimeout(context.Background(), 50*time.Second)
-	connect(ctx, "mongodb://localhost:27017", "chat-api")
+
+	uri := "mongodb://root:root@localhost:27017/?authSource=admin&readPreference=primary&directConnection=true&SSL=false"
+	connect(ctx, uri, "chat-api")
 }
 
 func connect(ctx context.Context, uri string, database string) {
